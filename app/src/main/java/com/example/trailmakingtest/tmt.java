@@ -4,64 +4,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.graphics.*;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.*;
-import android.widget.Button;
 import android.widget.EditText;
 import java.lang.Math;
-
-//import static com.example.trailmakingtest.display.colorList;
-//import static com.example.trailmakingtest.display.current_brush;
-//import static com.example.trailmakingtest.display.pathList;
 
 public class tmt extends AppCompatActivity {
 
     public static long start;
     public static long end;
-//    private long startTime;
-//    private long endTime;
-
-//    public static Path path = new Path();
-//    public static Paint paint_brush = new Paint();
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_tmt);
-//    }
-//
-//
-//    public void startStopwatch(View view) {
-//        start = SystemClock.elapsedRealtime();
-//    }
-//
-//    public void stopStopwatch(View view) {
-//        end = SystemClock.elapsedRealtime();
-//        int total = (int) (end - start);
-//
-//        EditText edtTime = findViewById(R.id.Time);
-//
-//        edtTime.setText(String.valueOf(total) + " ms");
-//    }
-//}
 
     DrawingView dv;
     private Paint mPaint;
-    public long startTime;
-    public long endTime;
-    private Button button;
-
-    public void onStartClick(View view) {
-        startTime = SystemClock.elapsedRealtime();
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tmt);
         dv = new DrawingView(this);
         setContentView(dv);
         mPaint = new Paint();
@@ -71,28 +31,17 @@ public class tmt extends AppCompatActivity {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(12);
-
+        mPaint.setStrokeWidth(6);
     }
 
-
-//    public void startStopwatch(View view) {
-//        start = SystemClock.elapsedRealtime();
-//    }
-//
     public void displayTime(View view) {
         int total = (int) (end - start);
-
         EditText edtTime = findViewById(R.id.Time);
-
         edtTime.setText(String.valueOf(total) + " ms");
     }
 
-
     public class DrawingView extends View {
 
-        public int width;
-        public  int height;
         private Bitmap mBitmap;
         private Canvas  mCanvas;
         private Path    mPath;
@@ -138,26 +87,21 @@ public class tmt extends AppCompatActivity {
             float deltax = circleX - xpos;
             float deltay = circleY - ypos;
             float distance = (float) Math.pow((Math.pow(deltax,2) + Math.pow(deltay,2)), 0.5);
-            Log.i("tag", String.valueOf(distance));
-
-            if (distance < radius) return true;
-            return false;
+            return distance < radius;
         }
 
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
-//            mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
             Bitmap workingBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tmt_sample_small);
             mBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888, true);
-            mBitmap = Bitmap.createScaledBitmap(mBitmap, 800, 1050, true);
+            mBitmap = Bitmap.createScaledBitmap(mBitmap, 800, 1080, true);
             mCanvas = new Canvas(mBitmap);
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-
             canvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
             canvas.drawPath( mPath,  mPaint);
             canvas.drawPath( circlePath,  circlePaint);
@@ -180,12 +124,12 @@ public class tmt extends AppCompatActivity {
                 mPath.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
                 mX = x;
                 mY = y;
-
                 circlePath.reset();
                 circlePath.addCircle(mX, mY, 30, Path.Direction.CW);
-                Log.i("tag", "XPOS " + String.valueOf(x));
-                Log.i("tag", "YPOS " + String.valueOf(y));
-                Log.i("tag", String.valueOf(currentIndex));
+
+//                Log.i("location", "XPOS " + String.valueOf(x));
+//                Log.i("location", "YPOS " + String.valueOf(y));
+//                Log.i("tag", String.valueOf(currentIndex));
 
                 if (currentIndex == 0) tmt.start = SystemClock.elapsedRealtime();
 
@@ -193,9 +137,9 @@ public class tmt extends AppCompatActivity {
                     if (mPaint.getColor() == -16711936 && currentIndex!=0) {
                         mPaint.setColor(Color.RED);
                     }
-                    else if (currentIndex!=7) mPaint.setColor(Color.GREEN);
+                    else mPaint.setColor(Color.GREEN);
 
-                    if (currentIndex == 7) {
+                    if (currentIndex == circleArray.length-1) {
                         tmt.end = SystemClock.elapsedRealtime();
                         setContentView(R.layout.activity_tmt);
                     }

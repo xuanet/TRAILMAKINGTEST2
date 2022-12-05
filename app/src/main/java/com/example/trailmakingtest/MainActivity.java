@@ -5,13 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.*;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.widget.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button button;
+    private Button button1;
     private Button button2;
     private String firstName;
     private String lastName;
@@ -22,20 +21,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        button = (Button) findViewById(R.id.btnNextPage);
-        button.setOnClickListener(new View.OnClickListener() {
+        button1 = (Button) findViewById(R.id.test1);
+        button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openTMT();
+                openTMT(1);
+            }
+        });
+
+        button2 = (Button) findViewById(R.id.test2);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openTMT(2);
             }
         });
     }
 
-    public void openTMT() {
-        Intent intent = new Intent(this, tmt.class);
-        startActivity(intent);
+    public void openTMT(int i) {
+        if (i == 1) {
+            Intent intent = new Intent(this, tmt.class);
+            startActivity(intent);
+        }
+        if (i == 2) {
+            Intent intent = new Intent(this, tmt_large.class);
+            startActivity(intent);
+        }
     }
-
 
     public void onBtnClick (View view) {
         TextView txtFirstName = findViewById(R.id.txtFirstName);
@@ -57,12 +69,5 @@ public class MainActivity extends AppCompatActivity {
         Log.i("tag", firstName);
         Log.i("tag", lastName);
         Log.i("tag", email);
-
-        Display mdisp = getWindowManager().getDefaultDisplay();
-        int maxX = mdisp.getWidth();
-        int maxY = mdisp.getHeight();
-        Log.i("tag", String.valueOf(maxX));
-        Log.i("tag", String.valueOf(maxY));
-
     }
 }

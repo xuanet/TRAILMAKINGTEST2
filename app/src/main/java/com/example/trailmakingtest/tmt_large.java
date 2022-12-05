@@ -8,63 +8,21 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.*;
-import android.widget.Button;
 import android.widget.EditText;
+import java.lang.Math;
 
-//import static com.example.trailmakingtest.display.colorList;
-//import static com.example.trailmakingtest.display.current_brush;
-//import static com.example.trailmakingtest.display.pathList;
+public class tmt_large extends AppCompatActivity {
 
-public class tmtnovember181 extends AppCompatActivity {
-
-//    private long start;
-//    private long end;
-//    private long startTime;
-//    private long endTime;
-
-//    public static Path path = new Path();
-//    public static Paint paint_brush = new Paint();
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_tmt);
-//    }
-//
-//
-//    public void startStopwatch(View view) {
-//        start = SystemClock.elapsedRealtime();
-//    }
-//
-//    public void stopStopwatch(View view) {
-//        end = SystemClock.elapsedRealtime();
-//        int total = (int) (end - start);
-//
-//        EditText edtTime = findViewById(R.id.Time);
-//
-//        edtTime.setText(String.valueOf(total) + " ms");
-//    }
-//}
+    public static long start;
+    public static long end;
 
     DrawingView dv;
     private Paint mPaint;
-    public long startTime;
-    public long endTime;
-    private Button button;
-
-    private long start;
-    private long end;
-
-    public void onStartClick(View view) {
-        startTime = SystemClock.elapsedRealtime();
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tmt);
         dv = new DrawingView(this);
-//        dv = new ConnectDotsView(this);
         setContentView(dv);
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -73,28 +31,17 @@ public class tmtnovember181 extends AppCompatActivity {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(12);
-
+        mPaint.setStrokeWidth(6);
     }
 
-    public void startStopwatch(View view) {
-        start = SystemClock.elapsedRealtime();
-    }
-
-    public void stopStopwatch(View view) {
-        end = SystemClock.elapsedRealtime();
+    public void displayTime(View view) {
         int total = (int) (end - start);
-
         EditText edtTime = findViewById(R.id.Time);
-
         edtTime.setText(String.valueOf(total) + " ms");
     }
 
-
     public class DrawingView extends View {
 
-        public int width;
-        public  int height;
         private Bitmap mBitmap;
         private Canvas  mCanvas;
         private Path    mPath;
@@ -102,6 +49,10 @@ public class tmtnovember181 extends AppCompatActivity {
         Context context;
         private Paint circlePaint;
         private Path circlePath;
+
+        private float radius;
+        private float[][] circleArray;
+        private int currentIndex;
 
         public DrawingView(Context c) {
             super(c);
@@ -115,20 +66,59 @@ public class tmtnovember181 extends AppCompatActivity {
             circlePaint.setStyle(Paint.Style.STROKE);
             circlePaint.setStrokeJoin(Paint.Join.MITER);
             circlePaint.setStrokeWidth(4f);
+
+            // Specific to this test
+            currentIndex = 0;
+            this.radius = 30;
+            this.circleArray = new float[25][];
+            circleArray[0] = new float[] {491, 775};
+            circleArray[1] = new float[] {379, 894};
+            circleArray[2] = new float[] {569, 900};
+            circleArray[3] = new float[] {591, 410};
+            circleArray[4] = new float[] {367, 528};
+            circleArray[5] = new float[] {475, 638};
+            circleArray[6] = new float[] {331, 706};
+            circleArray[7] = new float[] {150, 883};
+            circleArray[8] = new float[] {187 ,978};
+            circleArray[9] = new float[] {280, 883};
+            circleArray[10] = new float[] {364, 1007};
+            circleArray[11] = new float[] {57, 1030};
+            circleArray[12] = new float[] {110, 570};
+            circleArray[13] = new float[] {45, 670};
+            circleArray[14] = new float[] {40, 128};
+            circleArray[15] = new float[] {122, 311};
+            circleArray[16] = new float[] {267, 60};
+            circleArray[17] = new float[] {314, 316};
+            circleArray[18] = new float[] {505, 220};
+            circleArray[19] = new float[] {369, 207};
+            circleArray[20] = new float[] {413, 51};
+            circleArray[21] = new float[] {727, 159};
+            circleArray[22] = new float[] {757, 978};
+            circleArray[23] = new float[] {666, 556};
+            circleArray[24] = new float[] {628, 1014};
+        }
+
+        private boolean success(float xpos, float ypos, int index, float radius) {
+            float circleX = circleArray[index][0];
+            float circleY = circleArray[index][1];
+            float deltax = circleX - xpos;
+            float deltay = circleY - ypos;
+            float distance = (float) Math.pow((Math.pow(deltax,2) + Math.pow(deltay,2)), 0.5);
+            return distance < radius;
         }
 
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
-
-            mBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            Bitmap workingBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tmt_large);
+            mBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888, true);
+            mBitmap = Bitmap.createScaledBitmap(mBitmap, 800, 1080, true);
             mCanvas = new Canvas(mBitmap);
         }
 
         @Override
         protected void onDraw(Canvas canvas) {
             super.onDraw(canvas);
-
             canvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
             canvas.drawPath( mPath,  mPaint);
             canvas.drawPath( circlePath,  circlePaint);
@@ -151,11 +141,30 @@ public class tmtnovember181 extends AppCompatActivity {
                 mPath.quadTo(mX, mY, (x + mX)/2, (y + mY)/2);
                 mX = x;
                 mY = y;
-
                 circlePath.reset();
                 circlePath.addCircle(mX, mY, 30, Path.Direction.CW);
-                Log.i("tag", "XPOS " + String.valueOf(x));
-                Log.i("tag", "YPOS " + String.valueOf(y));
+
+//                Log.i("location", "XPOS " + String.valueOf(x));
+//                Log.i("location", "YPOS " + String.valueOf(y));
+//                Log.i("tag", String.valueOf(currentIndex));
+
+                if (currentIndex == 0) tmt_large.start = SystemClock.elapsedRealtime();
+
+                if (success(x, y, currentIndex, radius)) {
+                    if (mPaint.getColor() == -16711936 && currentIndex!=0) {
+                        mPaint.setColor(Color.RED);
+                    }
+                    else mPaint.setColor(Color.GREEN);
+
+                    if (currentIndex == circleArray.length-1) {
+                        tmt_large.end = SystemClock.elapsedRealtime();
+                        setContentView(R.layout.activity_tmt_large);
+                    }
+
+                    if (currentIndex!=circleArray.length-1) {
+                        currentIndex++;
+                    }
+                }
             }
         }
 
