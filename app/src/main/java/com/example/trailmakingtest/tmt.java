@@ -131,7 +131,7 @@ public class tmt extends AppCompatActivity {
 //                Log.i("location", "YPOS " + String.valueOf(y));
 //                Log.i("tag", String.valueOf(currentIndex));
 
-                if (currentIndex == 0) tmt.start = SystemClock.elapsedRealtime();
+                if (currentIndex == 0 && success(x, y, currentIndex, radius)) tmt.start = SystemClock.elapsedRealtime();
 
                 if (success(x, y, currentIndex, radius)) {
                     if (mPaint.getColor() == -16711936 && currentIndex!=0) {
