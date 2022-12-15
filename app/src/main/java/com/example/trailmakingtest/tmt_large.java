@@ -3,12 +3,16 @@ package com.example.trailmakingtest;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.*;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.*;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import java.lang.Math;
 
 public class tmt_large extends AppCompatActivity {
@@ -34,12 +38,41 @@ public class tmt_large extends AppCompatActivity {
         mPaint.setStrokeWidth(6);
     }
 
+    protected void sendEmail(int total) {
+        Log.i("Send email", "");
+
+        String[] TO = {"ackertmt@gmail.com"};
+        String[] CC = {"kx33@duke.edu"};
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+
+
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_CC, CC);
+        String FIRSTNAME = MainActivity.firstName;
+        String LASTNAME = MainActivity.lastName;
+        int TEST = MainActivity.whichTest;
+        String TIME = String.valueOf(total) + " ms";
+        String COMBINED =  FIRSTNAME + " " + LASTNAME + "\n" + "Test number: " + String.valueOf(TEST) + "\n" + TIME;
+        emailIntent.putExtra(Intent.EXTRA_TEXT, COMBINED);
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            finish();
+            Log.i("Sent email...", "");
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(tmt_large.this,
+                    "There is no email client installed.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     public void displayTime(View view) {
         int total = (int) (end - start);
         EditText edtTime = findViewById(R.id.Time);
         edtTime.setText(String.valueOf(total) + " ms");
+        sendEmail(total);
     }
-
     public class DrawingView extends View {
 
         private Bitmap mBitmap;

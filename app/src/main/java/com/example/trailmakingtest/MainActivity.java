@@ -3,6 +3,7 @@ package com.example.trailmakingtest;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.*;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,9 +13,14 @@ public class MainActivity extends AppCompatActivity {
 
     private Button button1;
     private Button button2;
-    private String firstName;
-    private String lastName;
-    private String email;
+    public static String firstName;
+    public static String lastName;
+    public static String email;
+    public static int whichTest;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openTMT(int i) {
+        whichTest = i;
         if (i == 1) {
             Intent intent = new Intent(this, tmt.class);
             startActivity(intent);
@@ -50,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onBtnClick (View view) {
+
         TextView txtFirstName = findViewById(R.id.txtFirstName);
         TextView txtLastName = findViewById(R.id.txtLastName);
         TextView txtEmail = findViewById(R.id.txtEmail);
@@ -66,8 +74,19 @@ public class MainActivity extends AppCompatActivity {
         lastName = edtTxtLastName.getText().toString();
         email = edtTxtEmail.getText().toString();
 
+        if (firstName.length() == 0 || lastName.length() == 0) {
+            Context context = getApplicationContext();
+            CharSequence text = "Please enter valid name";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+        }
+
+
         Log.i("tag", firstName);
         Log.i("tag", lastName);
         Log.i("tag", email);
+
+//        sendEmail();
     }
 }
