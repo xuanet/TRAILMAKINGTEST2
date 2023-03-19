@@ -14,11 +14,16 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.lang.Math;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class tmt extends AppCompatActivity {
 
     public static long start;
     public static long end;
+    public long[] timer = new long[] {-1, -1, -1, -1, -1, -1, -1, -1};
+    public boolean mistake = false;
 
     DrawingView dv;
     private Paint mPaint;
@@ -71,7 +76,9 @@ public class tmt extends AppCompatActivity {
         int total = (int) (end - start);
         EditText edtTime = findViewById(R.id.Time);
         edtTime.setText(String.valueOf(total) + " ms");
-        sendEmail(total);
+        Log.i("timer_array", Arrays.toString(timer));
+
+//        sendEmail(total);
     }
 
     public class DrawingView extends View {
@@ -101,7 +108,7 @@ public class tmt extends AppCompatActivity {
             circlePaint.setStrokeJoin(Paint.Join.MITER);
             circlePaint.setStrokeWidth(4f);
 
-            // Specific to this test
+            // These are the circle coordinates specific to this test
             currentIndex = 0;
             this.radius = 60;
             this.circleArray = new float[8][];
@@ -116,6 +123,9 @@ public class tmt extends AppCompatActivity {
         }
 
         private boolean success(float xpos, float ypos, int index, float radius) {
+            if (index < 0) {
+                return false;
+            }
             float circleX = circleArray[index][0];
             float circleY = circleArray[index][1];
             float deltax = circleX - xpos;
@@ -152,6 +162,11 @@ public class tmt extends AppCompatActivity {
         }
 
         private void touch_move(float x, float y) {
+//            coordinatesX.add(x);
+//            coordinatesY.add(y);
+//            countPoints++;
+//            Log.i("tag", String.valueOf(coordinatesX.size()));
+
             float dx = Math.abs(x - mX);
             float dy = Math.abs(y - mY);
             if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
@@ -165,21 +180,45 @@ public class tmt extends AppCompatActivity {
 //                Log.i("location", "YPOS " + String.valueOf(y));
 //                Log.i("tag", String.valueOf(currentIndex));
 
-                if (currentIndex == 0 && success(x, y, currentIndex, radius)) tmt.start = SystemClock.elapsedRealtime();
+
+                // Start the timer at the instance the finger is over the first circle
+                if (currentIndex == 0 && success(x, y, currentIndex, radius)) {
+                    tmt.start = SystemClock.elapsedRealtime();
+                }
 
                 if (success(x, y, currentIndex, radius)) {
-                    if (mPaint.getColor() == -16711936 && currentIndex!=0) {
-                        mPaint.setColor(Color.RED);
-                    }
-                    else mPaint.setColor(Color.GREEN);
 
+////                    mPath.lineTo(mX, mY);
+//                    circlePath.reset();
+//                    // commit the path to our offscreen
+//                    mCanvas.drawPath(mPath,  mPaint);
+//                    mPath.rewind();
+
+                    mistake = false;
+                    mPaint.setColor(Color.GREEN);
+
+                    if (timer[currentIndex] < 0) {
+                        timer[currentIndex] = SystemClock.elapsedRealtime()-tmt.start;
+                    }
                     if (currentIndex == circleArray.length-1) {
                         tmt.end = SystemClock.elapsedRealtime();
                         setContentView(R.layout.activity_tmt);
                     }
-
-                    if (currentIndex!=circleArray.length-1) {
+                    else  {
                         currentIndex++;
+                    }
+                }
+                for (int i = 0; i < circleArray.length; i++) {
+                    if (i == currentIndex - 1) {
+                        continue;
+                    }
+                    if (success(x, y, i, radius)) {
+                        mPaint.setColor(Color.RED);
+                        if (!mistake && currentIndex > 0) {
+                            currentIndex--;
+                            mistake = true;
+                        }
+                        break;
                     }
                 }
             }
@@ -198,6 +237,15 @@ public class tmt extends AppCompatActivity {
         public boolean onTouchEvent(MotionEvent event) {
             float x = event.getX();
             float y = event.getY();
+
+//            if (countPoints > eraseXPointsBefore) {
+//                float previousX = coordinatesX.get(countPoints-eraseXPointsBefore);
+//                float previousY = coordinatesY.get(countPoints-eraseXPointsBefore);
+//                mPaint.setColor(Color.TRANSPARENT);
+//                mCanvas.drawPoint(previousX, previousY, mPaint);
+//                Log.i("tag", "ERASING");
+//                Log.i("tag", String.valueOf(countPoints));
+//            }
 
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:

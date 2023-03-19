@@ -13,13 +13,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Button button1;
     private Button button2;
+    private Button button3;
     public static String firstName;
     public static String lastName;
     public static String email;
     public static int whichTest;
-
-
-
 
 
     @Override
@@ -42,6 +40,14 @@ public class MainActivity extends AppCompatActivity {
                 openTMT(2);
             }
         });
+
+        button3 = (Button) findViewById(R.id.test3);
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openTMT(3);
+            }
+        });
     }
 
     public void openTMT(int i) {
@@ -52,6 +58,10 @@ public class MainActivity extends AppCompatActivity {
         }
         if (i == 2) {
             Intent intent = new Intent(this, tmt_large.class);
+            startActivity(intent);
+        }
+        if (i == 3) {
+            Intent intent = new Intent(this, tmt_large2.class);
             startActivity(intent);
         }
     }

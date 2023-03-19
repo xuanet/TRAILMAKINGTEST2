@@ -17,14 +17,14 @@ import java.lang.Math;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class tmt_large extends AppCompatActivity {
+public class tmt_large2 extends AppCompatActivity {
 
     public static long start;
     public static long end;
 
     DrawingView dv;
     private Paint mPaint;
-    public long[] timer = new long[] {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+    public long[] timer = new long[] {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
     public boolean mistake = false;
 
     @Override
@@ -66,7 +66,7 @@ public class tmt_large extends AppCompatActivity {
             finish();
             Log.i("Sent email...", "");
         } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(tmt_large.this,
+            Toast.makeText(tmt_large2.this,
                     "There is no email client installed.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -108,32 +108,31 @@ public class tmt_large extends AppCompatActivity {
             // Specific to this test
             currentIndex = 0;
             this.radius = 30;
-            this.circleArray = new float[25][];
-            circleArray[0] = new float[] {491, 775};
-            circleArray[1] = new float[] {379, 894};
-            circleArray[2] = new float[] {569, 900};
-            circleArray[3] = new float[] {591, 410};
-            circleArray[4] = new float[] {367, 528};
-            circleArray[5] = new float[] {475, 638};
-            circleArray[6] = new float[] {331, 706};
-            circleArray[7] = new float[] {150, 883};
-            circleArray[8] = new float[] {187 ,978};
-            circleArray[9] = new float[] {280, 883};
-            circleArray[10] = new float[] {364, 1007};
-            circleArray[11] = new float[] {57, 1030};
-            circleArray[12] = new float[] {110, 570};
-            circleArray[13] = new float[] {45, 670};
-            circleArray[14] = new float[] {40, 128};
-            circleArray[15] = new float[] {122, 311};
-            circleArray[16] = new float[] {267, 60};
-            circleArray[17] = new float[] {314, 316};
-            circleArray[18] = new float[] {505, 220};
-            circleArray[19] = new float[] {369, 207};
-            circleArray[20] = new float[] {413, 51};
-            circleArray[21] = new float[] {727, 159};
-            circleArray[22] = new float[] {757, 978};
-            circleArray[23] = new float[] {666, 556};
-            circleArray[24] = new float[] {628, 1014};
+            this.circleArray = new float[24][];
+            circleArray[0] = new float[] {408, 474};
+            circleArray[1] = new float[] {558, 805};
+            circleArray[2] = new float[] {289, 775};
+            circleArray[3] = new float[] {367, 200};
+            circleArray[4] = new float[] {455, 330};
+            circleArray[5] = new float[] {561, 562};
+            circleArray[6] = new float[] {564, 155};
+            circleArray[7] = new float[] {677, 167};
+            circleArray[8] = new float[] {672 ,632};
+            circleArray[9] = new float[] {624, 893};
+            circleArray[10] = new float[] {430, 863};
+            circleArray[11] = new float[] {242, 965};
+            circleArray[12] = new float[] {189, 486};
+            circleArray[13] = new float[] {123, 612};
+            circleArray[14] = new float[] {98, 67};
+            circleArray[15] = new float[] {214, 298};
+            circleArray[16] = new float[] {211, 139};
+            circleArray[17] = new float[] {496, 54};
+            circleArray[18] = new float[] {740, 67};
+            circleArray[19] = new float[] {702, 733};
+            circleArray[20] = new float[] {742, 985};
+            circleArray[21] = new float[] {58, 1017};
+            circleArray[22] = new float[] {43, 531};
+            circleArray[23] = new float[] {136, 805};
         }
 
         private boolean success(float xpos, float ypos, int index, float radius) {
@@ -151,7 +150,7 @@ public class tmt_large extends AppCompatActivity {
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
-            Bitmap workingBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tmt_large);
+            Bitmap workingBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tmt_large2);
             mBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888, true);
             mBitmap = Bitmap.createScaledBitmap(mBitmap, 800, 1080, true);
             mCanvas = new Canvas(mBitmap);
@@ -176,8 +175,9 @@ public class tmt_large extends AppCompatActivity {
         }
 
         private void touch_move(float x, float y) {
-//            Log.i("xpos", String.valueOf(x));
-//            Log.i("ypos", String.valueOf(y));
+            Log.i("xpos", String.valueOf(x));
+            Log.i("ypos", String.valueOf(y));
+            Log.i("index", String.valueOf(currentIndex));
 
             float dx = Math.abs(x - mX);
             float dy = Math.abs(y - mY);
@@ -193,7 +193,7 @@ public class tmt_large extends AppCompatActivity {
 //                Log.i("tag", String.valueOf(currentIndex));
 
                 if (currentIndex == 0 && success(x, y, currentIndex, radius)) {
-                    tmt_large.start = SystemClock.elapsedRealtime();
+                    tmt_large2.start = SystemClock.elapsedRealtime();
                 }
 
                 if (success(x, y, currentIndex, radius)) {
@@ -201,11 +201,11 @@ public class tmt_large extends AppCompatActivity {
                     mPaint.setColor(Color.GREEN);
 
                     if (timer[currentIndex] < 0) {
-                        timer[currentIndex] = SystemClock.elapsedRealtime()-tmt_large.start;
+                        timer[currentIndex] = SystemClock.elapsedRealtime()-tmt_large2.start;
                     }
                     if (currentIndex == circleArray.length-1) {
-                        tmt_large.end = SystemClock.elapsedRealtime();
-                        setContentView(R.layout.activity_tmt_large);
+                        tmt_large2.end = SystemClock.elapsedRealtime();
+                        setContentView(R.layout.activity_tmt_large2);
                     }
                     else {
                         currentIndex++;
