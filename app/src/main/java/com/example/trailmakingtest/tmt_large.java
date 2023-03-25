@@ -26,6 +26,7 @@ public class tmt_large extends AppCompatActivity {
     private Paint mPaint;
     public long[] timer = new long[] {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
     public boolean mistake = false;
+    public boolean hasLifted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,6 +198,11 @@ public class tmt_large extends AppCompatActivity {
                 }
 
                 if (success(x, y, currentIndex, radius)) {
+
+                    hasLifted = false;
+                    mCanvas.drawPath(mPath,  mPaint);               // retains old correct lines
+                    touch_start(x, y);
+
                     mistake = false;
                     mPaint.setColor(Color.GREEN);
 
@@ -218,7 +224,7 @@ public class tmt_large extends AppCompatActivity {
                     }
                     if (success(x, y, i, radius)) {
                         mPaint.setColor(Color.RED);
-                        if (!mistake && currentIndex > 0) {
+                        if (!mistake && !hasLifted && currentIndex > 0) {
                             currentIndex--;
                             mistake = true;
                         }
@@ -252,6 +258,10 @@ public class tmt_large extends AppCompatActivity {
                     invalidate();
                     break;
                 case MotionEvent.ACTION_UP:
+                    if (mPaint.getColor() == Color.GREEN && currentIndex != 0 && !hasLifted) {
+                        currentIndex--;
+                        hasLifted = true;
+                    }
                     touch_up();
                     invalidate();
                     break;

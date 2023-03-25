@@ -24,6 +24,7 @@ public class tmt extends AppCompatActivity {
     public static long end;
     public long[] timer = new long[] {-1, -1, -1, -1, -1, -1, -1, -1};
     public boolean mistake = false;
+    public boolean hasLifted = false;
 
     DrawingView dv;
     private Paint mPaint;
@@ -148,7 +149,7 @@ public class tmt extends AppCompatActivity {
             super.onDraw(canvas);
             canvas.drawBitmap( mBitmap, 0, 0, mBitmapPaint);
             canvas.drawPath( mPath,  mPaint);
-            canvas.drawPath( circlePath,  circlePaint);
+//            canvas.drawPath( circlePath,  circlePaint);
         }
 
         private float mX, mY;
@@ -166,6 +167,7 @@ public class tmt extends AppCompatActivity {
 //            coordinatesY.add(y);
 //            countPoints++;
 //            Log.i("tag", String.valueOf(coordinatesX.size()));
+            Log.i("index", String.valueOf(currentIndex));
 
             float dx = Math.abs(x - mX);
             float dy = Math.abs(y - mY);
@@ -188,11 +190,9 @@ public class tmt extends AppCompatActivity {
 
                 if (success(x, y, currentIndex, radius)) {
 
-////                    mPath.lineTo(mX, mY);
-//                    circlePath.reset();
-//                    // commit the path to our offscreen
-//                    mCanvas.drawPath(mPath,  mPaint);
-//                    mPath.rewind();
+                    hasLifted = false;
+                    mCanvas.drawPath(mPath,  mPaint);               // retains old correct lines
+                    touch_start(x, y);
 
                     mistake = false;
                     mPaint.setColor(Color.GREEN);
@@ -214,7 +214,7 @@ public class tmt extends AppCompatActivity {
                     }
                     if (success(x, y, i, radius)) {
                         mPaint.setColor(Color.RED);
-                        if (!mistake && currentIndex > 0) {
+                        if (!mistake && !hasLifted && currentIndex > 0) {
                             currentIndex--;
                             mistake = true;
                         }
@@ -257,6 +257,10 @@ public class tmt extends AppCompatActivity {
                     invalidate();
                     break;
                 case MotionEvent.ACTION_UP:
+                    if (mPaint.getColor() == Color.GREEN && currentIndex != 0 && !hasLifted) {
+                        currentIndex--;
+                        hasLifted = true;
+                    }
                     touch_up();
                     invalidate();
                     break;
