@@ -24,12 +24,16 @@ public class tmt_large extends AppCompatActivity {
 
     DrawingView dv;
     private Paint mPaint;
-    public long[] timer = new long[] {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
+    public long[] timer = new long[24];
     public boolean mistake = false;
     public boolean hasLifted = false;
+    int maxTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Arrays.fill(timer, -1);
+        start = SystemClock.elapsedRealtime();
+        maxTime = 300000;
         super.onCreate(savedInstanceState);
         dv = new DrawingView(this);
         setContentView(dv);
@@ -40,7 +44,7 @@ public class tmt_large extends AppCompatActivity {
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeJoin(Paint.Join.ROUND);
         mPaint.setStrokeCap(Paint.Cap.ROUND);
-        mPaint.setStrokeWidth(1);
+        mPaint.setStrokeWidth(6);
     }
 
     protected void sendEmail(int total) {
@@ -112,40 +116,72 @@ public class tmt_large extends AppCompatActivity {
             // Specific to this test
             currentIndex = 0;
             this.radius = 30*scale;
-            this.circleArray = new float[25][];
-            circleArray[0] = new float[] {491, 775};
-            circleArray[1] = new float[] {379, 894};
-            circleArray[2] = new float[] {569, 900};
-            circleArray[3] = new float[] {591, 410};
-            circleArray[4] = new float[] {367, 528};
-            circleArray[5] = new float[] {475, 638};
-            circleArray[6] = new float[] {331, 706};
-            circleArray[7] = new float[] {150, 883};
-            circleArray[8] = new float[] {187 ,978};
-            circleArray[9] = new float[] {280, 883};
-            circleArray[10] = new float[] {364, 1007};
-            circleArray[11] = new float[] {57, 1030};
-            circleArray[12] = new float[] {110, 570};
-            circleArray[13] = new float[] {45, 670};
-            circleArray[14] = new float[] {40, 128};
-            circleArray[15] = new float[] {122, 311};
-            circleArray[16] = new float[] {267, 60};
-            circleArray[17] = new float[] {314, 316};
-            circleArray[18] = new float[] {505, 220};
-            circleArray[19] = new float[] {369, 207};
-            circleArray[20] = new float[] {413, 51};
-            circleArray[21] = new float[] {727, 159};
-            circleArray[22] = new float[] {757, 978};
-            circleArray[23] = new float[] {666, 556};
-            circleArray[24] = new float[] {628, 1014};
+//            this.circleArray = new float[25][];
+//            circleArray[0] = new float[] {491, 775};
+//            circleArray[1] = new float[] {379, 894};
+//            circleArray[2] = new float[] {569, 900};
+//            circleArray[3] = new float[] {591, 410};
+//            circleArray[4] = new float[] {367, 528};
+//            circleArray[5] = new float[] {475, 638};
+//            circleArray[6] = new float[] {331, 706};
+//            circleArray[7] = new float[] {150, 883};
+//            circleArray[8] = new float[] {187 ,978};
+//            circleArray[9] = new float[] {280, 883};
+//            circleArray[10] = new float[] {364, 1007};
+//            circleArray[11] = new float[] {57, 1030};
+//            circleArray[12] = new float[] {110, 570};
+//            circleArray[13] = new float[] {45, 670};
+//            circleArray[14] = new float[] {40, 128};
+//            circleArray[15] = new float[] {122, 311};
+//            circleArray[16] = new float[] {267, 60};
+//            circleArray[17] = new float[] {314, 316};
+//            circleArray[18] = new float[] {505, 220};
+//            circleArray[19] = new float[] {369, 207};
+//            circleArray[20] = new float[] {413, 51};
+//            circleArray[21] = new float[] {727, 159};
+//            circleArray[22] = new float[] {757, 978};
+//            circleArray[23] = new float[] {666, 556};
+//            circleArray[24] = new float[] {628, 1014};
+
+            this.circleArray = new float[24][];
+
+            circleArray[0] = new float[] {730, 1037};
+            circleArray[1] = new float[] {553, 1205};
+            circleArray[2] = new float[] {838, 1203};
+            circleArray[3] = new float[] {854, 545};
+
+            circleArray[4] = new float[] {530, 712};
+            circleArray[5] = new float[] {683, 853};
+            circleArray[6] = new float[] {480, 944};
+            circleArray[7] = new float[] {284, 1086};
+
+            circleArray[8] = new float[] {344, 1233};
+            circleArray[9] = new float[] {535, 1347};
+            circleArray[10] = new float[] {109, 1371};
+            circleArray[11] = new float[] {226, 764};
+
+            circleArray[12] = new float[] {75, 892};
+            circleArray[13] = new float[] {76, 185};
+            circleArray[14] = new float[] {181, 418};
+            circleArray[15] = new float[] {391, 97};
+
+            circleArray[16] = new float[] {459, 427};
+            circleArray[17] = new float[] {732, 303};
+            circleArray[18] = new float[] {537, 293};
+            circleArray[19] = new float[] {619, 79};
+
+            circleArray[20] = new float[] {1053, 230};
+            circleArray[21] = new float[] {1093, 1307};
+            circleArray[22] = new float[] {966, 750};
+            circleArray[23] = new float[] {933, 1348};
         }
 
         private boolean success(float xpos, float ypos, int index, float radius) {
             if (index < 0) {
                 return false;
             }
-            float circleX = circleArray[index][0]*scale;
-            float circleY = circleArray[index][1]*scale;
+            float circleX = circleArray[index][0];
+            float circleY = circleArray[index][1];
             float deltax = circleX - xpos;
             float deltay = circleY - ypos;
             float distance = (float) Math.pow((Math.pow(deltax,2) + Math.pow(deltay,2)), 0.5);
@@ -154,10 +190,13 @@ public class tmt_large extends AppCompatActivity {
 
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+
+            // 1620: 1941
+
             super.onSizeChanged(w, h, oldw, oldh);
-            Bitmap workingBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tmt_large);
+            Bitmap workingBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.afull);
             mBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888, true);
-            mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) (800*scale), (int) (1080*scale), true);
+            mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) (800*scale), (int) (800*1941/1620*scale), true);
             mCanvas = new Canvas(mBitmap);
         }
 
@@ -180,9 +219,12 @@ public class tmt_large extends AppCompatActivity {
         }
 
         private void touch_move(float x, float y) {
-//            Log.i("xpos", String.valueOf(x));
-//            Log.i("ypos", String.valueOf(y));
-
+            Log.i("xpos", String.valueOf(x));
+            Log.i("ypos", String.valueOf(y));
+            if (SystemClock.elapsedRealtime() - tmt_large.start > maxTime) {
+                tmt_large.end = -1;
+                setContentView(R.layout.activity_tmt_large);
+            }
             float dx = Math.abs(x - mX);
             float dy = Math.abs(y - mY);
             if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
