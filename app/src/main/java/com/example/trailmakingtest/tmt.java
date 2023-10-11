@@ -96,6 +96,8 @@ public class tmt extends AppCompatActivity {
         private float[][] circleArray;
         private int currentIndex;
 
+        float scale = 1.5F;
+
         public DrawingView(Context c) {
             super(c);
             context=c;
@@ -111,7 +113,7 @@ public class tmt extends AppCompatActivity {
 
             // These are the circle coordinates specific to this test
             currentIndex = 0;
-            this.radius = 60;
+            this.radius = 60*scale;
             this.circleArray = new float[8][];
             circleArray[0] = new float[] {521, 266};
             circleArray[1] = new float[] {86, 340};
@@ -127,8 +129,8 @@ public class tmt extends AppCompatActivity {
             if (index < 0) {
                 return false;
             }
-            float circleX = circleArray[index][0];
-            float circleY = circleArray[index][1];
+            float circleX = circleArray[index][0]*scale;
+            float circleY = circleArray[index][1]*scale;
             float deltax = circleX - xpos;
             float deltay = circleY - ypos;
             float distance = (float) Math.pow((Math.pow(deltax,2) + Math.pow(deltay,2)), 0.5);
@@ -137,10 +139,11 @@ public class tmt extends AppCompatActivity {
 
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+
             super.onSizeChanged(w, h, oldw, oldh);
             Bitmap workingBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tmt_sample_small);
             mBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888, true);
-            mBitmap = Bitmap.createScaledBitmap(mBitmap, 800, 1080, true);
+            mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) (800*scale), (int) (1080*scale), true);
             mCanvas = new Canvas(mBitmap);
         }
 

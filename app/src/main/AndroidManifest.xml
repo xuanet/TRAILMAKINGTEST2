@@ -15,22 +15,26 @@
         <activity
             android:name=".tmt_large2"
             android:exported="false"
-            android:label="@string/title_activity_tmt_large2"
-            android:theme="@style/Theme.TRAILMAKINGTEST.NoActionBar">
+            android:label="TEST B"
+            android:theme="@style/Theme.TRAILMAKINGTEST">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".tmt_large"
-            android:exported="false">
+            android:exported="false"
+            android:label="TEST A"
+            android:theme="@style/Theme.TRAILMAKINGTEST">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".tmt"
-            android:exported="false">
+            android:exported="false"
+            android:label="DEMO"
+            android:theme="@style/Theme.TRAILMAKINGTEST">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

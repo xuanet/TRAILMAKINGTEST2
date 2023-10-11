@@ -76,6 +76,7 @@ public class tmt_large2 extends AppCompatActivity {
         int total = (int) (end - start);
         EditText edtTime = findViewById(R.id.Time);
         edtTime.setText(String.valueOf(total) + " ms");
+//        edtTime.setText("Test complete, thank you!");
         Log.i("time_array", Arrays.toString(timer));
 //        sendEmail(total);
     }
@@ -93,6 +94,8 @@ public class tmt_large2 extends AppCompatActivity {
         private float[][] circleArray;
         private int currentIndex;
 
+        float scale = 1.5F;
+
         public DrawingView(Context c) {
             super(c);
             context=c;
@@ -108,7 +111,7 @@ public class tmt_large2 extends AppCompatActivity {
 
             // Specific to this test
             currentIndex = 0;
-            this.radius = 30;
+            this.radius = 30*scale;
             this.circleArray = new float[24][];
             circleArray[0] = new float[] {408, 474};
             circleArray[1] = new float[] {558, 805};
@@ -140,8 +143,8 @@ public class tmt_large2 extends AppCompatActivity {
             if (index < 0) {
                 return false;
             }
-            float circleX = circleArray[index][0];
-            float circleY = circleArray[index][1];
+            float circleX = circleArray[index][0]*scale;
+            float circleY = circleArray[index][1]*scale;
             float deltax = circleX - xpos;
             float deltay = circleY - ypos;
             float distance = (float) Math.pow((Math.pow(deltax,2) + Math.pow(deltay,2)), 0.5);
@@ -153,7 +156,7 @@ public class tmt_large2 extends AppCompatActivity {
             super.onSizeChanged(w, h, oldw, oldh);
             Bitmap workingBitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.tmt_large2);
             mBitmap = workingBitmap.copy(Bitmap.Config.ARGB_8888, true);
-            mBitmap = Bitmap.createScaledBitmap(mBitmap, 800, 1080, true);
+            mBitmap = Bitmap.createScaledBitmap(mBitmap, (int) (800*scale), (int) (1080*scale), true);
             mCanvas = new Canvas(mBitmap);
         }
 
